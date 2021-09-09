@@ -1,0 +1,25 @@
+﻿<?xml version="1.0"?>
+<KWire>
+	<Settings>
+		<Ember_IP>
+			</Ember_IP>
+			<Ember_Port></Ember_Port>
+			<Ember_ProviderName></Ember_ProviderName>
+			<AutoCam_IP></AutoCam_IP>
+			<AutoCam_Port></AutoCam_Port>
+			<Debug></Debug>
+			</Settings>
+	<AudioDevices>
+		<Device>
+			<NAME></NAME>
+			<SOURCE></SOURCE>
+			<ORDER></ORDER>
+		</Device>
+	</AudioDevices>
+	<EmberGPIs>
+		<EGPI>
+			<ID></ID>
+			<NAME></NAME>
+		</EGPI>
+	</EmberGPIs>
+</KWire>

@@ -109,5 +109,11 @@
       <Name>Lawo</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="KWire_Config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="KWire_Config_empty.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
