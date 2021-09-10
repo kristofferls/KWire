@@ -62,7 +62,8 @@ namespace KWire
             //REST(); Deprecated, as AutoCam probably wont need this info. 
             JSONExport(); //Create a JSON file containing all available Device IDS. 
 
-            Logfile.Write("MAIN :: Running..");
+            Logfile.Write("");
+            Logfile.Write("MAIN :: >>>>>>> Running <<<<<<<<");
             while(true) 
             {
                 BroadcastToAutoCam();
@@ -71,7 +72,7 @@ namespace KWire
             //TestMethod();
             
             
-            Console.ReadKey();
+            //Console.ReadKey();
         }
 
         public static void TestMethod() 

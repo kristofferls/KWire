@@ -73,10 +73,12 @@ namespace KWire
         }
         public static void MainMenu()
         {
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            //Console.WriteLine(version); // -> "1.1.2.10"
             //Version v = Assembly.GetExecutingAssembly().GetName().Version;
             //string About = string.Format(CultureInfo.InvariantCulture, @"Mandozzi Communication Server Service {0}.{1}.{2} (r{3})", v.Major, v.Minor, v.Build, v.Revision);
             Write("#####################################################################");
-            Write("KWire AES67 to AutoCam v  0.1 by Kristoffer L-S");
+            Write("KWire AES67 to AutoCam v " + version + " by Kristoffer L-S");
             Write("#####################################################################");
             Write("");
             Write("Please report errors to kristoffer@nrk.no");
