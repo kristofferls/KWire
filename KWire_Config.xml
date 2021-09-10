@@ -10,21 +10,25 @@
 	</Settings>
 	<AudioDevices>
 		<Device>
+			<DEVICE_ID>14</DEVICE_ID>
 			<NAME>R3LAY WDM Driver</NAME>
 			<SOURCE>EGO</SOURCE>
 			<ORDER>1</ORDER>
 		</Device>
 		<Device>
+			<DEVICE_ID></DEVICE_ID>
 			<NAME>R3LAY WDM Driver 2</NAME>
 			<SOURCE>PROD</SOURCE>
 			<ORDER>2</ORDER>
 		</Device>
 		<Device>
+			<DEVICE_ID></DEVICE_ID>
 			<NAME>R3LAY WDM Driver 3</NAME>
 			<SOURCE>MIC3</SOURCE>
 			<ORDER>3</ORDER>
 		</Device>
 		<Device>
+			<DEVICE_ID></DEVICE_ID>
 			<NAME>R3LAY WDM Driver 4</NAME>
 			<SOURCE>MIC4</SOURCE>
 			<ORDER>4</ORDER>

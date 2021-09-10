@@ -79,22 +79,27 @@ namespace KWire
                     Sources = numOfDevInCfg; // update global number of devices. Used by Core. 
                     XmlNodeList aDevices = xml.SelectNodes("/KWire/AudioDevices/Device");
 
-
-                    
-
-
-
-
                     foreach (XmlNode xn in aDevices)
                     {
                         string order = xn["ORDER"].InnerText;
                         string name = xn["NAME"].InnerText;
                         string source = xn["SOURCE"].InnerText;
+                        string devID = xn["DEVICE_ID"].InnerText;
 
-                        string[] devs = { order, name, source };
+                        string[] devs = { order, name, source,devID };
                         Devices.Add(devs);
 
-                        Logfile.Write("CONFIG :: Added: <" + name + "> with source: " + source + " and order: " + order + " to device list");
+                        if (devID.Length != 0) //If there is a Device_ID tag in config, make a note of this. 
+                        {
+                            Logfile.Write("CONFIG :: Added: <" + name + "> with source: " + source + " and order: " + order + " to device list");
+                            Logfile.Write("CONFIG :: " + name + " has a DeviceID " + devID + " set in config. This will override name search");
+                        }
+
+                        else 
+                        {
+                            Logfile.Write("CONFIG :: Added: <" + name + "> with source: " + source + " and order: " + order + " to device list");
+                        }
+                        
                     }
 
                     Logfile.Write("CONFIG :: Found " + Convert.ToString(Devices.Count) + " audio inputs in config file.");

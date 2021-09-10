@@ -154,24 +154,41 @@ namespace KWire
 
                 for (int i = 0; i < Config.Devices.Count; i++)
                 {
-                    string match = Convert.ToString(Config.Devices[i][1]); // the device name from position 1 in array. 
-                    string sourceName = Config.Devices[i][2];
-                    //Clean up the match criteria. 
-
-                    match = Regex.Replace(match, "Lawo R3LAY", "\r\n");
-                    match = match.Replace("(", "".Replace(")", ""));
-                    match = Regex.Replace(match, @"\s+", "");
-
-                    for (int x = 0; x < systemDevices.Count; x++)
+                    
+                    if (Config.Devices[i][3].Length > 0) // IF there is a DeviceID tag set, use that to create the AudioDevice. 
                     {
+                        Logfile.Write("MAIN :: AudioDevice has a defined DeviceID " + Config.Devices[i][3] + " set. Skipping name lookup, and adding directly");
+                        
+                        int devId = Convert.ToInt32(Config.Devices[i][3]);
+                        string srcName = Config.Devices[i][2];
+                        
+                        var dev = WaveIn.GetCapabilities(devId);
+                        AudioDevices.Add(new Device(devId, srcName, dev.ProductName, dev.Channels));
+                    }
 
-                        if (Regex.IsMatch(systemDevices[x][1], @"(^|\s)" + match + @"(\s|$)"))
+                    else 
+                    {
+                        string match = Convert.ToString(Config.Devices[i][1]); // the device name from position 1 in array. 
+                        string sourceName = Config.Devices[i][2];
+                        //Clean up the match criteria. 
+
+                        match = Regex.Replace(match, "Lawo R3LAY", "\r\n");
+                        match = match.Replace("(", "".Replace(")", ""));
+                        match = Regex.Replace(match, @"\s+", "");
+
+                        for (int x = 0; x < systemDevices.Count; x++)
                         {
-                            var dev = WaveIn.GetCapabilities(x);
-                            AudioDevices.Add(new Device(x, sourceName, dev.ProductName, dev.Channels));
+
+                            if (Regex.IsMatch(systemDevices[x][1], @"(^|\s)" + match + @"(\s|$)"))
+                            {
+                                var dev = WaveIn.GetCapabilities(x);
+                                AudioDevices.Add(new Device(x, sourceName, dev.ProductName, dev.Channels));
+                            }
+
                         }
 
                     }
+
 
 
                 }

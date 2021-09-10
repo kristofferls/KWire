@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0"?>
 <KWire>
 	<Settings>
-		<Ember_IP>
-			</Ember_IP>
-			<Ember_Port></Ember_Port>
-			<Ember_ProviderName></Ember_ProviderName>
-			<AutoCam_IP></AutoCam_IP>
-			<AutoCam_Port></AutoCam_Port>
-			<Debug></Debug>
-			</Settings>
+		<Ember_IP></Ember_IP>
+		<Ember_Port></Ember_Port>
+		<Ember_ProviderName></Ember_ProviderName>
+		<AutoCam_IP></AutoCam_IP>
+		<AutoCam_Port></AutoCam_Port>
+		<Debug></Debug>
+	</Settings>
 	<AudioDevices>
 		<Device>
+			<DEVICE_ID></DEVICE_ID>
 			<NAME></NAME>
 			<SOURCE></SOURCE>
 			<ORDER></ORDER>
