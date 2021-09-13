@@ -17,6 +17,7 @@ namespace KWire
         private int _id;
         private string _name;
         private bool _state;
+        
 
         public EGPI(int id, string name)
         {
@@ -86,7 +87,14 @@ namespace KWire
 
             catch (Exception err) 
             {
-                Logfile.Write("EGPI :: MonitorState ERROR :: " + err);
+                if (Config.Debug) 
+                {
+                    Logfile.Write("EGPI :: MonitorState ERROR :: " + err);
+                }
+                else 
+                {
+                    Logfile.Write("EGPI :: MonitorState ERROR :: Ember-provider offline?");
+                }
             }
          
 
@@ -137,7 +145,19 @@ namespace KWire
             }
             catch (Exception error) 
             {
-                Logfile.Write("EGPI :: WaitForChange ERRPOR:: " + error);
+                if(Config.Debug) 
+                {
+                    Logfile.Write("EGPI :: WaitForChange ERRPOR:: " + error);
+                }
+
+                else 
+                {
+
+                    Logfile.Write("EGPI :: WaitForChange ERROR :: Ember-provider offline?");
+                }
+
+                System.Threading.Thread.Sleep(60000);
+                
             }
            
         }
@@ -175,7 +195,14 @@ namespace KWire
             catch (Exception err) 
                        
             {
-                Logfile.Write("EGPI :: GetCurrentState ERROR :: " + err);
+                if (Config.Debug) 
+                {
+                    Logfile.Write("EGPI :: GetCurrentState ERROR :: " + err);
+                }
+                else 
+                {
+                    Logfile.Write("EGPI :: GetCurrentState ERROR :: Ember provider offline?");
+                }
             
             }
            

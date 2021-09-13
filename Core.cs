@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Text.RegularExpressions;
+using Topshelf;
 
 namespace KWire
 {
@@ -25,56 +26,88 @@ namespace KWire
         public static bool RedlightState = false;
         public static bool StateChanged = false;
 
-        /*
-        public Core() 
-        {
-            NumberOfAudioDevices = WaveIn.DeviceCount;
-            AudioDevices = new List<Device>();
-        }
-        */
         static void Main(string[] args)
+        {
+            foreach (string arg in args) 
+            {
+                if (arg == "devices")
+                {
+                    Logfile.Init();
+                    DisplayAudioDevices();
+                    break;
+                }
+                else 
+                {
+                    Logfile.Init();
+                    Logfile.Write("MAIN:: Did not understand argument " + arg + " . Assuming you want the list of devices? Here you go!");
+                    DisplayAudioDevices();
+                    break;
+                }
+            }
+            
+
+                // TOPSHELF SERVICE
+                var exitCode = HostFactory.Run(x =>
+                {
+                    x.Service<Kwire_Service>(s => {
+
+                        s.ConstructUsing(kwireService => new Kwire_Service());
+                        s.WhenStarted(kwireService => kwireService.Start());
+                        s.WhenStopped(kwireService => kwireService.Stop());
+
+                    });
+
+                    x.RunAsLocalSystem();
+                    x.SetServiceName("KWireService");
+                    x.SetDisplayName("KWire: AutoCam AES67 Ember+ Translator");
+                    x.SetDescription("A service that taps audio inputs and Ember+ messages and translates to AutoCam. Written by kristoffer@nrk.no");
+
+                    x.EnableServiceRecovery(src =>
+                    {
+                        src.OnCrashOnly();
+                        src.RestartService(delayInMinutes: 0); // First failure : Reset immediatly 
+                        src.RestartService(delayInMinutes: 1); // Second failure : Reset after 1 minute;
+                        src.RestartService(delayInMinutes: 5); // Subsequent failures
+                        src.SetResetPeriod(days: 1); //Reset failure conters after 1 day. 
+                    });
+                });
+
+                int exitCodeValue = (int)Convert.ChangeType(exitCode, exitCode.GetTypeCode());
+                Environment.ExitCode = exitCodeValue;
+
+
+
+        }
+
+        public static void Setup() 
         {
 
             Logfile.Init(); //Start the logger service. 
             Logfile.DeleteOld(); // Deletes old logfiles. 
             Config.ReadConfig(); // Reads all data from XML to Config-class object memory. 
-            
+
             EmberConsumer.Connect(); //Connect to the Ember provider
             EmberConsumer.PrintEmberTree(); // Test the connection by printing the deviceTree. 
             ConfigureAudioDevices();
             DisplayAudioDevices();
 
 
-            if (Config.AutoCam_IP != null || Config.AutoCam_Port != 0) 
+            if (Config.AutoCam_IP != null || Config.AutoCam_Port != 0)
             {
                 wsclient.Connect(Config.AutoCam_IP, Config.AutoCam_Port); // Connect to nodeJS. 
 
             }
 
-            else 
+            else
             {
                 Logfile.Write("MAIN :: ERROR :: No valid AutoCam IP or Port found in config! Please check Config.xml");
             }
-            
-            
 
-            //Console.WriteLine("There are {0} device objects configured", AudioDevice.Length);
-            //REST(); Deprecated, as AutoCam probably wont need this info. 
             JSONExport(); //Create a JSON file containing all available Device IDS. 
 
             Logfile.Write("");
-            Logfile.Write("MAIN :: >>>>>>> Running <<<<<<<<");
-            while(true) 
-            {
-                BroadcastToAutoCam();
-                Thread.Sleep(30);
-            }
-            //TestMethod();
-            
-            
-            //Console.ReadKey();
+            Logfile.Write("MAIN :: >>>>>>> Startup Complete <<<<<<<<");
         }
-
         public static void TestMethod() 
         {
             var testGPI = new EGPI(1, "REDLIGHT");

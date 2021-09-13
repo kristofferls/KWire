@@ -64,7 +64,13 @@ namespace KWire
         }
         catch (Exception err) 
         {
-            Logfile.Write("EmberConsumer :: ERROR : " + err);
+            if(Config.Debug) 
+            {
+                    Logfile.Write("EmberConsumer :: ERROR : " + err);
+
+            }
+                
+            
             return null;
         }
             

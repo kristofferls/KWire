@@ -16,7 +16,7 @@ namespace KWire
         public static IPAddress AutoCam_IP = null;
         public static int AutoCam_Port = 0;
         public static int[] DeviceIDs; // depr. 
-        public static bool Debug;
+        public static bool Debug = false;
         public static string[,] EGPIs;
         public static List<string[]> Devices; 
         public static int Sources;
