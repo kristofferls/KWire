@@ -28,48 +28,51 @@ namespace KWire
 
         static void Main(string[] args)
         {
-            foreach (string arg in args) 
-            {
-                if (arg == "devices")
-                {
-                    Logfile.Init();
-                    DisplayAudioDevices();
-                    break;
-                }
-                else 
-                {
-                    Logfile.Init();
-                    Logfile.Write("MAIN:: Did not understand argument " + arg + " . Assuming you want the list of devices? Here you go!");
-                    DisplayAudioDevices();
-                    break;
-                }
-            }
+
             
 
                 // TOPSHELF SERVICE
                 var exitCode = HostFactory.Run(x =>
                 {
-                    x.Service<Kwire_Service>(s => {
+                    bool arg = false;
 
-                        s.ConstructUsing(kwireService => new Kwire_Service());
-                        s.WhenStarted(kwireService => kwireService.Start());
-                        s.WhenStopped(kwireService => kwireService.Stop());
-
-                    });
-
-                    x.RunAsLocalSystem();
-                    x.SetServiceName("KWireService");
-                    x.SetDisplayName("KWire: AutoCam AES67 Ember+ Translator");
-                    x.SetDescription("A service that taps audio inputs and Ember+ messages and translates to AutoCam. Written by kristoffer@nrk.no");
-
-                    x.EnableServiceRecovery(src =>
+                    // This does not work as intended, as TopShelf looks for the paramter -install, and does not take any further args after installation. To be continued.
+                    x.AddCommandLineDefinition("devices", devices => 
                     {
-                        src.OnCrashOnly();
-                        src.RestartService(delayInMinutes: 0); // First failure : Reset immediatly 
-                        src.RestartService(delayInMinutes: 1); // Second failure : Reset after 1 minute;
-                        src.RestartService(delayInMinutes: 5); // Subsequent failures
-                        src.SetResetPeriod(days: 1); //Reset failure conters after 1 day. 
+                        Logfile.Init();
+                        DisplayAudioDevices();
+                        Logfile.Write("AudioDevices written to logfile!");
+                        Core.DisplayAudioDevices();
+                        arg = true;
+                        
                     });
+
+                    if (!arg) 
+                    {
+                        x.Service<Kwire_Service>(s => {
+
+                            s.ConstructUsing(kwireService => new Kwire_Service());
+                            s.WhenStarted(kwireService => kwireService.Start());
+                            s.WhenStopped(kwireService => kwireService.Stop());
+
+                        });
+
+                        x.RunAsLocalSystem();
+                        x.SetServiceName("KWireService");
+                        x.SetDisplayName("KWire: AutoCam AES67 Ember+ Translator");
+                        x.SetDescription("A service that taps audio inputs and Ember+ messages and translates to AutoCam. Written by kristoffer@nrk.no");
+
+                        x.EnableServiceRecovery(src =>
+                        {
+                            src.OnCrashOnly();
+                            src.RestartService(delayInMinutes: 0); // First failure : Reset immediatly 
+                            src.RestartService(delayInMinutes: 1); // Second failure : Reset after 1 minute;
+                            src.RestartService(delayInMinutes: 5); // Subsequent failures
+                            src.SetResetPeriod(days: 1); //Reset failure conters after 1 day. 
+                        });
+                    }
+
+                    
                 });
 
                 int exitCodeValue = (int)Convert.ChangeType(exitCode, exitCode.GetTypeCode());

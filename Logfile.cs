@@ -22,6 +22,7 @@ namespace KWire
         {
             MainMenu();
             Write("Logfile initiated");
+            DeleteOld();
         }
 
         public static void Write(string logmessage)
